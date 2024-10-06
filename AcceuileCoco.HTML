@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Salon de Discussion</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Bienvenue dans le Salon Coco Chat 2</h1>
+        </div>
+        <div class="form-container">
+            <input type="text" id="username" placeholder="Votre pseudo" required>
+            <input type="number" id="age" placeholder="Votre âge" min="18" required>
+            <select id="gender" required>
+                <option value="">Sélectionnez votre genre</option>
+                <option value="male">Homme</option>
+                <option value="female">Femme</option>
+                <option value="other">Transgenre</option>
+            </select>
+            <input type="text" id="postal-code" placeholder="Code postal" oninput="updateCity()">
+            <button id="enter-chat" onclick="enterChat()">Entrer dans le chat</button>
+        </div>
+    </div>
+
+    <script>
+        const cityMap = {
+            '75000': 'Paris',
+            '69000': 'Lyon',
+            '13000': 'Marseille',
+            '31000': 'Toulouse',
+            '44000': 'Nantes',
+        '33000': 'Bordeaux',
+        '59000': 'Lille',
+        '67000': 'Strasbourg',
+        '34000': 'Montpellier',
+        '06000': 'Nice',
+        '72000': 'Le Mans',
+        '14000': 'Caen',
+        '80000': 'Amiens',
+        '35000': 'Rennes',
+        '76000': 'Rouen',
+        '37000': 'Tours',
+        '45000': 'Orléans',
+        '63000': 'Clermont-Ferrand',
+        '21000': 'Dijon',
+        '57000': 'Metz',
+        '38000': 'Grenoble',
+        '68100': 'Mulhouse',
+        '29200': 'Brest',
+        '84000': 'Avignon',
+        '83100': 'Toulon',
+        '06000': 'Nice',
+        '80000': 'Amiens',
+	'66000': 'Perpignan',
+        };
+
+        function updateCity() {
+            const postalCodeInput = document.getElementById('postal-code');
+            const postalCode = postalCodeInput.value;
+            if (cityMap[postalCode]) {
+                postalCodeInput.value = cityMap[postalCode];
+            }
+        }
+
+        function enterChat() {
+            const username = document.getElementById('username').value;
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const postalCode = document.getElementById('postal-code').value;
+
+            if (age < 18) {
+                alert("Vous devez avoir au moins 18 ans pour entrer dans le chat.");
+                return;
+            }
+
+            // Redirection vers le salon de discussion (à implémenter)
+            alert(`Bienvenue ${username} ! Vous entrez dans le chat...`);
+        }
+    </script>
+</body>
+</html>
