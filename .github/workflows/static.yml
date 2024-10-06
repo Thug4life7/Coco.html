@@ -1,0 +1,514 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Coco Chat</title>
+    <style>
+        /* Style général */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #98FB98; /* Fond vert */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        /* Conteneur principal */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 60%;
+            height: 90vh;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        /* En-tête */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            background-color: #8B4513; /* Marron */
+            padding: 10px;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .header-tab {
+            color: white;
+            border: 2px solid #333;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .dropdown {
+            padding: 5px;
+        }
+
+        /* Styles pour les nouveaux boutons */
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button-group button {
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Couleurs spécifiques des boutons */
+        .filtre {
+            background-color: #E6E6FA; /* Couleur pour filtre */
+        }
+
+        .design {
+            background-color: #FFFFE0; /* Couleur pour design */
+        }
+
+        .reset {
+            background-color: #32CD32; /* Couleur pour réinitialiser */
+        }
+
+        .profil {
+            background-color: #A9A9A9; /* Couleur pour profil */
+        }
+
+        .premium {
+            background-color: #F5F5DC; /* Couleur pour premium */
+        }
+
+        .info {
+            background-color: #32CD32; /* Couleur pour info */
+        }
+
+        .smiley {
+            background-color: #FFA500; /* Couleur pour smiley */
+        }
+
+        .amiz {
+            background-color: #FFD700; /* Couleur pour amiz */
+        }
+
+        /* Conteneur des salons et utilisateurs */
+        .main-content {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            height: 70%;
+            margin-top: 20px;
+        }
+
+        /* Bloc pour les salons */
+        .salon-block {
+            width: 45%;
+            height: 75%;
+            background-color: #f0f0f0;
+            border: 2px solid #333;
+            padding: 10px;
+            border-radius: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .salon-block h3 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .salon-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #ADD8E6;
+            border: 1px solid #000;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .salon-item img {
+            margin-right: 10px;
+        }
+
+        .salon-item.blocked {
+            color: red;
+        }
+
+        .salon-item:hover {
+            background-color: #87CEEB;
+        }
+
+        /* Bloc pour les utilisateurs */
+        .user-block {
+            width: 45%;
+            height: 75%;
+            background-color: #f5f5f5;
+            border: 2px solid #333;
+            padding: 10px;
+            border-radius: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            background-color: #e6e6fa;
+            margin-bottom: 5px;
+            border: 2px solid #000;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .homme {
+            background-color: #add8e6;
+        }
+
+        .femme {
+            background-color: #ffb6c1;
+        }
+
+        .user-name {
+            font-weight: bold;
+        }
+
+        .user-age {
+            margin-left: 10px;
+        }
+
+        .user-location {
+            margin-left: auto;
+        }
+
+        /* Fenêtre modale pour chat utilisateur */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            height: 50%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header button {
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Barre de recherche */
+        .search-bar {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .search-bar input {
+            width: 60%;
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .search-bar button {
+            background-color: #4CAF50; /* Vert pour le bouton de recherche */
+            color: white;
+            padding: 10px;
+            margin-left: 10px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #45a049; /* Vert plus foncé au survol */
+        }
+
+        /* Style des messages */
+        .message-homme {
+            color: blue; /* Bleu pour les hommes */
+            font-size: 0.8em;
+        }
+
+        .message-femme {
+            color: pink; /* Rose pour les femmes */
+            font-size: 0.8em;
+        }
+
+        /* Style de la zone de discussion (fond bleu clair) */
+        #salonChat {
+            background-color: #ADD8E6; /* Bleu clair pour le fond */
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* Bouton envoyer en vert */
+        .btn-envoyer {
+            background-color: #32CD32; /* Vert clair */
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-envoyer:hover {
+            background-color: #28a745; /* Vert plus foncé au survol */
+        }
+
+        /* Bouton de retour */
+        .btn-retour {
+            background-color: #FF6347; /* Couleur rouge */
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-retour:hover {
+            background-color: #FF4500; /* Rouge plus foncé */
+        }
+
+        /* Bouton de profil en bas */
+        .profile-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: #FFD700; /* Couleur dorée pour le profil */
+            color: white;
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .profile-button:hover {
+            background-color: #FFC300; /* Doré plus clair au survol */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Coco Chat</h1>
+            <div class="button-group">
+                <button class="header-tab amiz" id="amisBtn">Amiz</button>
+                <button class="header-tab filtre">Filtre</button>
+                <button class="header-tab design">Design</button>
+                <button class="header-tab reset">Réinitialiser</button>
+                <button class="header-tab profil">Profil</button>
+                <button class="header-tab premium">Premium</button>
+                <button class="header-tab info">Info</button>
+                <button class="header-tab smiley">Smiley</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Salons -->
+            <div class="salon-block">
+                <h3>Salons</h3>
+                <div class="salon-item" onclick="openChat('Musique')">Musique</div>
+                <div class="salon-item" onclick="openChat('Films')">Films</div>
+                <div class="salon-item" onclick="openChat('80s')">80s</div>
+                <div class="salon-item" onclick="openChat('Jeux')">Jeux</div>
+                <div class="salon-item" onclick="openChat('Sport')">Sport</div>
+                <div class="salon-item" onclick="openChat('Technologie')">Technologie</div>
+                <div class="salon-item" onclick="openChat('Voyage')">Voyage</div>
+                <div class="salon-item" onclick="openChat('Cuisine')">Cuisine</div>
+                <div class="salon-item" onclick="openChat('Actualités')">Actualités</div>
+                <div class="salon-item" onclick="openChat('Mode')">Mode</div>
+            </div>
+
+            <!-- Utilisateurs -->
+            <div class="user-block">
+                <h3>Utilisateurs</h3>
+                <div class="user-item homme">
+                    <span class="user-name">Jean</span>
+                    <span class="user-age">25 ans</span>
+                    <span class="user-location">Paris</span>
+                </div>
+                <div class="user-item femme">
+                    <span class="user-name">Marie</span>
+                    <span class="user-age">22 ans</span>
+                    <span class="user-location">Lyon</span>
+                </div>
+                <div class="user-item homme">
+                    <span class="user-name">Alexandre</span>
+                    <span class="user-age">30 ans</span>
+                    <span class="user-location">Marseille</span>
+                </div>
+                <div class="user-item femme">
+                    <span class="user-name">Sophie</span>
+                    <span class="user-age">27 ans</span>
+                    <span class="user-location">Bordeaux</span>
+                </div>
+                <div class="user-item homme">
+                    <span class="user-name">David</span>
+                    <span class="user-age">29 ans</span>
+                    <span class="user-location">Toulouse</span>
+                </div>
+                <div class="user-item femme">
+                    <span class="user-name">Emma</span>
+                    <span class="user-age">26 ans</span>
+                    <span class="user-location">Nice</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Rechercher..." id="searchInput">
+            <button id="searchBtn">Rechercher</button>
+        </div>
+    </div>
+
+    <!-- Fenêtre modale pour les amis -->
+    <div class="modal" id="amisModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Liste des Amis</h2>
+                <button onclick="closeModal('amisModal')">X</button>
+            </div>
+            <ul>
+                <li>Amie 1</li>
+                <li>Amie 2</li>
+                <li>Amie 3</li>
+                <li>Amie 4</li>
+                <li>Amie 5</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Fenêtre modale pour le chat -->
+    <div class="modal" id="chatModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="chatTitle"></h2>
+                <button onclick="closeChat()">X</button>
+            </div>
+            <div id="salonChat">
+                <div class="message-homme">Jean: Salut !</div>
+                <div class="message-femme">Marie: Bonjour !</div>
+            </div>
+            <input type="text" id="messageInput" placeholder="Écrivez votre message ici..." onkeypress="checkEnter(event)">
+            <button class="btn-envoyer" onclick="sendMessage()">Envoyer</button>
+            <div class="button-group">
+                <button class="btn-envoyer" onclick="sendAudio()">Envoyer Audio</button>
+                <button class="btn-envoyer" onclick="sendImage()">Envoyer Image</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="profile-button" onclick="openModal('amisModal')">Amiz</button>
+
+    <script>
+        function openChat(salon) {
+            document.getElementById('chatTitle').innerText = salon;
+            document.getElementById('chatModal').style.display = 'flex';
+        }
+
+        function closeChat() {
+            document.getElementById('chatModal').style.display = 'none';
+        }
+
+        function checkEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const salonChat = document.getElementById('salonChat');
+            const message = messageInput.value;
+
+            if (message.trim()) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message-femme'; // Assuming user is female for this example
+                messageDiv.textContent = 'Vous: ' + message;
+                salonChat.appendChild(messageDiv);
+                messageInput.value = '';
+                salonChat.scrollTop = salonChat.scrollHeight; // Scroll to bottom
+            }
+        }
+
+        function sendAudio() {
+            // Fonctionnalité d'envoi d'audio (à implémenter)
+            alert("Audio envoyé !");
+        }
+
+        function sendImage() {
+            // Fonctionnalité d'envoi d'image (à implémenter)
+            alert("Image envoyée !");
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        document.getElementById('amisBtn').onclick = function () {
+            openModal('amisModal');
+        };
+
+        // Pour fermer la fenêtre modale en cliquant à l'extérieur
+        window.onclick = function (event) {
+            const modal = document.getElementById('amisModal');
+            if (event.target === modal) {
+                closeModal('amisModal');
+            }
+        };
+    </script>
+</body>
+
+</html>
